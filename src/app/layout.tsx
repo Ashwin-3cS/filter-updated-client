@@ -15,12 +15,12 @@ interface RootLayoutProps {
 }
 
 const RootLayout = ({ children }: RootLayoutProps) => {
-    const config = {
-        relay: "https://relay.farcaster.xyz",
-        rpcUrl: "https://mainnet.optimism.io",
-        siweUri: "https://filterapp.fun",
-        domain: "filterapp.fun",
-    };
+    // const config = {
+    //     relay: "https://relay.farcaster.xyz",
+    //     rpcUrl: "https://mainnet.optimism.io",
+    //     siweUri: "https://filterapp.fun",
+    //     domain: "filterapp.fun",
+    // };
 
     return (
         <html lang="en">
@@ -28,12 +28,12 @@ const RootLayout = ({ children }: RootLayoutProps) => {
                 <meta name="description" content={metadata.description} />
             </head>
             <body>
-                <Provider>
-                    <AuthKitProvider config={config}>
+                {/* <Provider>
+                    <AuthKitProvider config={config}> */}
                         <Navbar />
                         <main>{children}</main>
-                    </AuthKitProvider>
-                </Provider>
+                    {/* </AuthKitProvider>
+                </Provider> */}
             </body>
         </html>
     );  
