@@ -317,7 +317,7 @@ function Navbar() {
     return (
         <div className='w-full fixed h-[140px] flex justify-center items-center'>
             {status === 'loading' ? (
-                // Display a loading state while session is being fetched
+                
                 <div>Loading...</div>
             ) : isAuthenticated ? (
                 // When user is signed in
