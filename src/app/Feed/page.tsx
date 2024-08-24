@@ -1,6 +1,8 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 // Define a type for the feed items based on the response structure
 type FeedItem = {
@@ -13,19 +15,27 @@ type FeedItem = {
 const Page = () => {
   // Use the FeedItem type in your state
   const [feed, setFeed] = useState<FeedItem[]>([]);
+  const { data: session } = useSession();
+
+  const user_fid = session?.user?.fid;
+  console.log('user_fid : ', user_fid);
 
   useEffect(() => {
     // Fetch the data from the server-side API route
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/feed'); // Ensure the URL is correct
-        if (!response.ok) {
+        const response = await axios.get(`/api/feed/${user_fid}`); // Ensure the URL is correct
+        if (response.status < 200 || response.status >= 300) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json();
+         
+        console.log('the response is :', response);
+
+        // Axios automatically parses the response data as JSON
+        const data = response.data;
 
         // Check the structure of the fetched data
-        console.log(data);
+        console.log('the data is :', data);
 
         // Extract `casts` array from the response
         const feedItems = data.casts; // Adjust if the structure is different
@@ -37,8 +47,10 @@ const Page = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    if (user_fid) {
+      fetchData();
+    }
+  }, [user_fid]);
 
   return (
     <div>
@@ -48,7 +60,11 @@ const Page = () => {
           <div key={index}>
             <h3>{item.hash}</h3> {/* Display hash */}
             <p>{item.text}</p> {/* Display text */}
-            {item.parent_url && <a href={item.parent_url} target="_blank" rel="noopener noreferrer">Parent URL</a>}
+            {item.parent_url && (
+              <a href={item.parent_url} target="_blank" rel="noopener noreferrer">
+                Parent URL
+              </a>
+            )}
           </div>
         ))
       ) : (

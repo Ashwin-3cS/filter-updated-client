@@ -19,9 +19,6 @@ export default (req: NextApiRequest, res: NextApiResponse) =>
             type: "text",
             placeholder: "0x0",
           },
-          // In a production app with a server, these should be fetched from
-          // your Farcaster data indexer rather than have them accepted as part
-          // of credentials.
           name: {
             label: "Name",
             type: "text",
@@ -58,8 +55,24 @@ export default (req: NextApiRequest, res: NextApiResponse) =>
             id: fid.toString(),
             name: credentials?.name,
             image: credentials?.pfp,
+            fid: fid.toString(), // fid property added here
           };
         },
       }),
     ],
+    callbacks: {
+      async jwt({ token, user }) {
+        if (user) {
+          token.fid = user.fid; // Ensure fid is carried over
+        }
+        return token;
+      },
+      async session({ session, token }) {
+        // Ensure session.user exists and add fid to it
+        if (session.user && token.fid) {
+          session.user.fid = token.fid;
+        }
+        return session;
+      },
+    },
   });

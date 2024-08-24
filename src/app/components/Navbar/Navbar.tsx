@@ -280,6 +280,9 @@ function Navbar() {
 
     const handleSuccess = useCallback(async (res: StatusAPIResponse) => {
         console.log("response", res);
+        const user_fid = res.fid;
+
+
         const result = await signIn("credentials", {
             message: res.message,
             signature: res.signature,
