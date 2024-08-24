@@ -1,17 +1,23 @@
 import { useSession } from "next-auth/react";
 
 function Profile() {
-    const { data: session } = useSession();
-    console.log("Session Data:", session); // Debugging line
-    
-    return session ? (
-      <div style={{ fontFamily: "sans-serif" }}>
-        <p>Signed in as {session.user?.name}</p>
-      </div>
-    ) : (
-      <p>Scan the QR code to SignIN</p>
-    );
-  }
-  
+  const { data: session, status } = useSession();
 
-  export default Profile;
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  if (!session) {
+    return <p>Scan the QR code to Sign In</p>;
+  }
+
+  console.log("Session Data:", session); // This will now only log when session data is available
+
+  return (
+    <div>
+      <p >Signed in as {session.user?.name}</p>
+    </div>
+  );
+}
+
+export default Profile;

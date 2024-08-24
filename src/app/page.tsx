@@ -4,7 +4,7 @@ import "@farcaster/auth-kit/styles.css";
 import { AuthKitProvider } from "@farcaster/auth-kit";
 import Head from "next/head";
 
-import Content from "./components/Content/Content";
+import Navbar from "./components/Navbar/Navbar";
 
 const config = {
   relay: "https://relay.farcaster.xyz",
@@ -17,11 +17,11 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Farcaster AuthKit + NextAuth Demo</title>
+        <title>Filter Client</title>
       </Head>
       <main style={{ fontFamily: "Inter, sans-serif" }}>
         <AuthKitProvider config={config}>
-          <Content/>
+          <Navbar/>  
         </AuthKitProvider>
       </main>
     </>
