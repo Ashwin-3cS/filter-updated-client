@@ -30,7 +30,7 @@ const Page = () => {
     // Fetch the data from the server-side API route
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/api/feed/${user_fid}`); // Ensure the URL is correct
+        const response = await axios.get(`/api/cast/${user_fid}/get-cast`); // Ensure the URL is correct
         if (response.status < 200 || response.status >= 300) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
