@@ -1,19 +1,29 @@
-import React from 'react';
-import Image from 'next/image';
+'use client'
 
-const SignIn: React.FC = () => {
-  return (
-    <div className='flex flex-col items-center justify-center h-screen'>
-      <h1 className='text-2xl font-bold mb-4'>Welcome to Our App</h1>
-      <p>Please explore our features or sign in using the navbar.</p>
-      <Image
-        src='/logo.jpg'
-        alt='Logo'
-        width={300} 
-        height={300} 
-      />
-    </div>
-  );
+import "@farcaster/auth-kit/styles.css";
+import { AuthKitProvider } from "@farcaster/auth-kit";
+import Head from "next/head";
+
+import Content from "./components/Content/Content";
+
+const config = {
+  relay: "https://relay.farcaster.xyz",
+  rpcUrl: "https://mainnet.optimism.io",
+  siweUri: "https://filterapp.fun",
+  domain: "filterapp.fun",
 };
 
-export default SignIn;
+export default function Home() {
+  return (
+    <>
+      <Head>
+        <title>Farcaster AuthKit + NextAuth Demo</title>
+      </Head>
+      <main style={{ fontFamily: "Inter, sans-serif" }}>
+        <AuthKitProvider config={config}>
+          <Content/>
+        </AuthKitProvider>
+      </main>
+    </>
+  );
+}

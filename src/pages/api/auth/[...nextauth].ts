@@ -45,7 +45,7 @@ export default (req: NextApiRequest, res: NextApiResponse) =>
           const verifyResponse = await appClient.verifySignInMessage({
             message: credentials?.message as string,
             signature: credentials?.signature as `0x${string}`,
-            domain: "example.com",
+            domain: "filterapp.fun",
             nonce: csrfToken,
           });
           const { success, fid } = verifyResponse;
