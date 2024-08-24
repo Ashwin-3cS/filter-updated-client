@@ -3,17 +3,23 @@
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
+import { formatDistanceToNow } from 'date-fns';
+import { customImageLoader } from '@/src/utils/imageLoader'; // Adjust the path as needed
 
 // Define a type for the feed items based on the response structure
 type FeedItem = {
   hash: string;
   text: string;
   parent_url: string | null;
-  // Add other properties as needed based on the actual data
+  author: {
+    username: string;
+    pfp_url: string;
+  };
+  timestamp: string;
 };
 
 const Page = () => {
-  // Use the FeedItem type in your state
   const [feed, setFeed] = useState<FeedItem[]>([]);
   const { data: session } = useSession();
 
@@ -54,22 +60,45 @@ const Page = () => {
 
   return (
     <div>
-      {/* Render your feed data here */}
-      {feed.length > 0 ? (
-        feed.map((item, index) => (
-          <div key={index}>
-            <h3>{item.hash}</h3> {/* Display hash */}
-            <p>{item.text}</p> {/* Display text */}
-            {item.parent_url && (
-              <a href={item.parent_url} target="_blank" rel="noopener noreferrer">
-                Parent URL
-              </a>
+      <div className="pt-[140px]">
+        <div className="max-w-screen-md mx-auto p-4 rounded-lg overflow-hidden">
+          <div style={{ maxHeight: 'calc(100vh - 80px)' }}>
+            {feed.length > 0 ? (
+              feed.map((item, index) => (
+                <div key={index} className="bg-white rounded-lg shadow-lg p-4 mb-4 ring-1 ring-slate-900/10">
+                  <div className="flex items-center mb-2">
+                    {/* Render profile picture */}
+                    <Image
+                      loader={customImageLoader}
+                      src={item.author.pfp_url || ''}
+                      width={50}
+                      height={50}
+                      alt={item.author.username || 'User Avatar'}
+                      className="w-10 h-10 rounded-full mr-2"
+                    />
+                    <div>
+                      {/* Render user name */}
+                      <p className="text-gray-800 font-semibold">{item.author.username || 'Anonymous'}</p>
+                      {/* Render post time */}
+                      <span className="text-gray-500 text-sm">{item.timestamp ? formatDistanceToNow(new Date(item.timestamp), { addSuffix: true }) : 'Unknown Time'}</span>
+                    </div>
+                  </div>
+                  {/* Render post content */}
+                  <p className={`text-gray-800`}>{item.text}</p>
+                  {/* Render parent URL if available
+                  {item.parent_url && (
+                    <a href={item.parent_url} target="_blank" rel="noopener noreferrer">
+                      Parent URL
+                    </a>
+                  )} */}
+                </div>
+              ))
+            ) : (
+              <div>No feed items available</div>
             )}
           </div>
-        ))
-      ) : (
-        <div>No feed items available</div>
-      )}
+        </div>
+      </div>
     </div>
   );
 };
